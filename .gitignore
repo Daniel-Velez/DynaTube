@@ -13,7 +13,7 @@ ENV/
 # Si history.db es local y no quieres subir el historial de descargas al repo:
 *.db
 *.sqlite3
-
+*.txt
 # --- Configuración y Secretos ---
 # ¡NUNCA subas tus archivos de entorno con contraseñas o API keys!
 .env
