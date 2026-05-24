@@ -1,0 +1,13 @@
+# Archivos de entorno y secretos
+.env
+backend/cookies.txt
+
+# Carpetas de entorno virtual y descargas
+.venv/
+downloads/
+__pycache__/
+*.pyc
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db

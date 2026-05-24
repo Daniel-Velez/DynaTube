@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: adminpassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      # Carpeta para persistir las descargas
+      - ./downloads:/app/Downloads
+      # Montaje del archivo cookies.txt como solo lectura (Read-Only)
+      - ./backend/cookies.txt:/app/backend/cookies.txt:ro
+      # Montaje del código fuente para desarrollo (opcional, puedes quitarlo en producción)
+      - .:/app
+
+volumes:
+  postgres_data:

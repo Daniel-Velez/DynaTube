@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dynatube Pro - Descarga videos de YouTube">
+  <title>⚡ Dynatube Pro — 3.0</title>
+
+  <meta name="theme-color" content="#080810">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="/manifest.json">
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/auth.css">
+  <link rel="stylesheet" href="/css/admin.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://i.ytimg.com">
+</head>
+
+<body>
+
+  <!-- ==========================================
+       AUTH SCREEN
+       ========================================== -->
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-container">
+      <button id="closeAuth" class="btn-close-auth" aria-label="Cerrar">✕</button>
+      <div class="auth-logo"><span class="logo-icon">⚡</span>Dynatube</div>
+
+      <div id="loginForm" class="auth-form active">
+        <h2 class="auth-title">Iniciar Sesión</h2>
+        <div class="form-group">
+          <label for="loginUsername">Usuario o Email</label>
+          <input type="text" id="loginUsername" class="form-input" placeholder="usuario o correo" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Contraseña</label>
+          <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-auth-submit" id="btnLogin">Iniciar Sesión</button>
+        <div class="auth-switch">
+          ¿Sin cuenta? <a href="#" id="showRegister">Regístrate aquí</a>
+        </div>
+      </div>
+
+      <div id="registerForm" class="auth-form">
+        <h2 class="auth-title">Crear Cuenta</h2>
+        <div class="form-group">
+          <label for="registerUsername">Usuario</label>
+          <input type="text" id="registerUsername" class="form-input" placeholder="nombre de usuario" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="registerEmail">Email</label>
+          <input type="email" id="registerEmail" class="form-input" placeholder="tu@correo.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="registerFullName">Nombre Completo</label>
+          <input type="text" id="registerFullName" class="form-input" placeholder="Tu nombre" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="registerPassword">Contraseña</label>
+          <input type="password" id="registerPassword" class="form-input" placeholder="mínimo 6 caracteres" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label for="registerPasswordConfirm">Confirmar Contraseña</label>
+          <input type="password" id="registerPasswordConfirm" class="form-input" placeholder="repite la contraseña" autocomplete="new-password">
+        </div>
+        <button class="btn-auth-submit" id="btnRegister">Crear Cuenta</button>
+        <div class="auth-switch">
+          ¿Ya tienes cuenta? <a href="#" id="showLogin">Inicia sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MAIN APP
+       ========================================== -->
+  <div id="mainApp" style="width:100%;height:100%;display:flex;">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>Dynatube
+      </div>
+
+      <nav class="nav-menu">
+        <button class="menu-btn active" data-page="search">🔍 Descargar</button>
+        <button class="menu-btn" data-page="converter">🔄 Convertidor</button>
+        <button class="menu-btn" data-page="history">📜 Historial</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile" id="userProfile">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <div class="user-info">
+            <div class="user-name" id="userName">Invitado</div>
+            <div id="userActionArea">
+              <button class="btn-logout" id="btnLogout" style="display:none">Cerrar Sesión</button>
+              <button class="btn-login-trigger" id="btnShowAuth">Iniciar Sesión</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="theme-toggle" id="themeToggle">🌙 Modo Claro</button>
+        <div class="version">v3.0.0</div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- SEARCH PAGE -->
+      <section class="page active" id="search-page">
+        <div class="search-bar">
+          <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" class="search-input"
+              placeholder="Pega un enlace o escribe lo que buscas...">
+          </div>
+          <button class="btn btn-search" id="btnSearch">Buscar</button>
+        </div>
+
+        <div class="content-layout">
+          <div class="results-container">
+            <div class="video-grid" id="videoGrid"></div>
+            <div class="loading-spinner" id="loadingSpinner" style="display:none">
+              <div class="spinner"></div>
+              <div class="spinner-text">Buscando...</div>
+            </div>
+          </div>
+
+          <aside class="queue-panel">
+            <div class="queue-header">
+              <span class="queue-title">Cola de Descargas</span>
+              <span class="queue-count" id="queueCount">0</span>
+            </div>
+            <div class="queue-list" id="queueList"></div>
+            <button class="btn-clear-queue" id="btnClearQueue">🗑 Limpiar cola</button>
+          </aside>
+        </div>
+
+        <div class="status-bar">
+          <div class="status-dot" id="statusDot"></div>
+          <span class="status-text" id="statusText">En espera</span>
+        </div>
+      </section>
+
+      <!-- CONVERTER PAGE -->
+      <section class="page" id="converter-page">
+        <div class="converter-wrapper">
+          <div class="converter-card">
+            <div class="converter-icon-wrap">⚡</div>
+            <h2 class="converter-title">Conversión Local</h2>
+            <p class="converter-desc">Convierte archivos de video a MP3 de alta calidad directamente desde tu dispositivo. Sin subir nada a la nube.</p>
+
+            <div class="converter-drop-zone" id="converterDropZone">
+              Arrastra un archivo de video aquí
+            </div>
+
+            <input type="file" id="fileInput" accept="video/*" style="display:none">
+            <button class="btn-converter" id="btnSelectFiles">📂 Seleccionar archivo</button>
+
+            <div class="converter-status" id="converterStatus">Listo.</div>
+            <div class="converter-progress-wrap">
+              <div class="converter-progress-fill" id="converterProgress"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HISTORY PAGE -->
+      <section class="page" id="history-page">
+        <div class="history-header">
+          <h2 class="history-title">Historial de Descargas</h2>
+          <button class="btn-refresh" id="btnRefreshHistory">↻ Actualizar</button>
+        </div>
+        <div id="anonymousWarning" style="display:none">
+          ⚠️ No has iniciado sesión. Las descargas no se guardarán en el historial.
+        </div>
+        <div class="history-list" id="historyList"></div>
+      </section>
+
+      <!-- ADMIN PAGE -->
+      <section class="page" id="admin-page" style="overflow-y:auto;padding-bottom:50px">
+        <div class="admin-page-header">
+          <h2 class="admin-page-title">⚙️ Panel Admin</h2>
+          <button class="btn-refresh" id="btnRefreshAdminStats">↻ Actualizar</button>
+        </div>
+
+        <div class="admin-grid" id="adminStatsContent"></div>
+
+        <div class="admin-section" id="adminUsersTable"></div>
+        <div class="admin-section" id="adminDownloadsTable"></div>
+        <div class="admin-section" id="adminSessionsTable"></div>
+
+        <div class="danger-zone">
+          <div class="danger-zone-title">🔥 Zona de Peligro</div>
+          <p class="danger-zone-desc">Estas acciones son irreversibles y afectan a todo el servidor.</p>
+          <button class="btn-danger" id="btnAdminCleanup">🗑️ Limpieza Forzada de Archivos</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- PREVIEW MODAL -->
+  <div id="previewModal" class="modal-overlay">
+    <div class="modal-content">
+      <button id="closeModal" class="btn-close-modal" aria-label="Cerrar">✕</button>
+      <div class="video-responsive-wrapper" id="modalVideoContainer"></div>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/script.js"></script>
+</body>
+</html>

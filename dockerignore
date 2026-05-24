@@ -1,0 +1,41 @@
+# ============================================================
+# Dynatube Pro - .dockerignore
+# ============================================================
+
+# Entorno virtual Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Archivos descargados y temporales
+backend/downloads/
+backend/history.db
+*.db
+
+# Variables de entorno locales (nunca al contenedor)
+.env
+backend/.env
+
+# Git
+.git/
+.gitignore
+
+# Editores e IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Docker mismo
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Node (si aplica)
+node_modules/
