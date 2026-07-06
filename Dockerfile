@@ -35,4 +35,4 @@ EXPOSE 5000
 
 # 8. Comando para iniciar usando el módulo de Python directamente
 # Esto soluciona el problema de ruta con gunicorn
-CMD ["python", "-m", "gunicorn", "--bind", "0.0.0.0:5000", "backend.app:app"]
+CMD python3 init_db.py && gunicorn --bind 0.0.0.0:5000 backend.app:app

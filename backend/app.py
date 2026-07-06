@@ -87,6 +87,7 @@ def get_db_connection():
         conn.close()
 
 def init_db():
+    print("✅ Iniciando configuración de base de datos...")
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -142,7 +143,8 @@ def init_db():
                     INSERT INTO users (username, email, password_hash, full_name, is_admin, is_active)
                     VALUES ('admin', 'admin@dynatube.local', %s, 'Administrador', TRUE, TRUE)
                 """, (admin_hash,))
-                print("✅ Usuario admin creado: admin / admin123")
+            print("✅ Tablas verificadas/creadas exitosamente.")
+                
 
 def add_to_history(title: str, tipo: str, url: str = "", file_path: str = "", user_id: int = None):
     if user_id is None:
@@ -157,6 +159,14 @@ def add_to_history(title: str, tipo: str, url: str = "", file_path: str = "", us
                 )
     except psycopg2.Error as e:
         print(f"Error guardando historial: {e}")
+
+# --- AÑADE ESTO AQUÍ ---
+with app.app_context():
+    try:
+        init_db() 
+        print("✅ Base de datos inicializada correctamente.")
+    except Exception as e:
+        print(f"❌ Error al inicializar la base de datos: {e}")
 
 # ==========================================
 # UTILIDADES
@@ -710,7 +720,7 @@ def cleanup_routine():
         time.sleep(3600)
         cleanup_old_files(DOWNLOADS_DIR, 24)
         cleanup_old_files(TEMP_DIR, 6)
-
+        
 if __name__ == '__main__':
     init_db()
     threading.Thread(target=cleanup_routine, daemon=True).start()
